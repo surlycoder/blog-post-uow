@@ -9,14 +9,27 @@ namespace BloggingApp.Services
 	{
 		private readonly IBlogRepository _blogRepository;
 
-		public BlogService(IBlogRepository blogRepository)
+		public BlogService( IBlogRepository blogRepository )
 		{
 			_blogRepository = blogRepository;
+		}
+
+		public BlogDto CreateBlog( BlogDto blogToCreate )
+		{
+			_blogRepository.Create( blogToCreate );
+			var blog = _blogRepository.GetById( blogToCreate.Id );
+
+			return blog;
+		}
+
+		public BlogDto GetBlogById( int id )
+		{
+			return _blogRepository.GetById( id );
 		}
 
 		public List<BlogDto> GetBlogs()
 		{
 			return _blogRepository.GetAll().ToList();
 		}
-    }
+	}
 }

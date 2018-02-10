@@ -1,4 +1,5 @@
-﻿using BloggingApp.Services;
+﻿using BloggingApp.Data.Entities;
+using BloggingApp.Services;
 using Microsoft.AspNetCore.Mvc;
 
 namespace BloggingApp.Controllers
@@ -24,13 +25,17 @@ namespace BloggingApp.Controllers
 		[HttpGet( "{id}" )]
 		public IActionResult Get( int id )
 		{
-			return Ok();
+			var blog = _blogService.GetBlogById( id );
+
+			return Ok( blog );
 		}
 
 		[HttpPost]
-		public IActionResult Post( [FromBody]string value )
+		public IActionResult Post( [FromBody]BlogDto blogToCreate )
 		{
-			return Ok();
+			var blog = _blogService.CreateBlog( blogToCreate );
+
+			return Ok( blog );
 		}
 
 		[HttpPut( "{id}" )]
