@@ -12,7 +12,7 @@ namespace BlogUoW.Tests
 		public void GetById_Returns_Blog()
 		{
 			// Arrange
-			var repository = new BlogRepository( new BlogSqlServerContext( DbConnectionString ) );
+			var repository = new BlogRepository( new BlogAppSqlServerContext( DbConnectionString ) );
 
 			// Act
 			var blog = repository.GetById( 1 );
@@ -25,7 +25,7 @@ namespace BlogUoW.Tests
 		public void GetAll_Returns_List_Of_Blogs()
 		{
 			// Arrange
-			var repository = new BlogRepository( new BlogSqlServerContext( DbConnectionString ) );
+			var repository = new BlogRepository( new BlogAppSqlServerContext( DbConnectionString ) );
 
 			// Act
 			var blogs = repository.GetAll();
@@ -39,7 +39,7 @@ namespace BlogUoW.Tests
 		public void Create_Inserts_New_Blog()
 		{
 			// Arrange
-			var repository = new BlogRepository( new BlogSqlServerContext( DbConnectionString ) );
+			var repository = new BlogRepository( new BlogAppSqlServerContext( DbConnectionString ) );
 
 			var blogToCreate = new BlogDto()
 			{
@@ -52,6 +52,5 @@ namespace BlogUoW.Tests
 			// Assert
 			Assert.True( blogToCreate.Id > 0 );
 		}
-
 	}
 }

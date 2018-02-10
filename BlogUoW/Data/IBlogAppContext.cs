@@ -2,7 +2,7 @@
 
 namespace BlogUoW.Data
 {
-	public interface IBlogContext
+	public interface IBlogAppContext
 	{
 		IDbConnection CreateConnection();
 	}

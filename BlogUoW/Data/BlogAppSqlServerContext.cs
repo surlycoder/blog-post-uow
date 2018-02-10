@@ -3,11 +3,11 @@ using System.Data.SqlClient;
 
 namespace BlogUoW.Data
 {
-	public class BlogSqlServerContext:IBlogContext
+	public class BlogAppSqlServerContext:IBlogAppContext
 	{
 		private readonly string _connectionString;
 
-		public BlogSqlServerContext( string connectionString )
+		public BlogAppSqlServerContext( string connectionString )
 		{
 			_connectionString = connectionString;
 		}

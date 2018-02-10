@@ -5,22 +5,23 @@ namespace BlogUoW.Data
 {
 	public class BlogRepository : IBlogRepository
 	{
-		private readonly IBlogContext _blogContext;
+		private readonly IBlogAppContext _blogAppContext;
 
-		public BlogRepository( IBlogContext blogContext )
+		public BlogRepository( IBlogAppContext blogAppContext )
 		{
-			_blogContext = blogContext;
+			_blogAppContext = blogAppContext;
 		}
 
 		public BlogDto GetById( int id )
 		{
 			BlogDto blog = null;
 
-			using ( var connection = _blogContext.CreateConnection() )
+			using ( var connection = _blogAppContext.CreateConnection() )
 			using ( var command = connection.CreateCommand() )
 			{
 				command.Connection = connection;
 				command.CommandText = "SELECT BlogId, Url FROM Blogs WHERE BlogId = @BlogId";
+
 				var param = command.CreateParameter();
 				param.ParameterName = "BlogId";
 				param.Value = id;
@@ -44,7 +45,7 @@ namespace BlogUoW.Data
 		{
 			IList<BlogDto> blogs = new List<BlogDto>();
 
-			using ( var connection = _blogContext.CreateConnection() )
+			using ( var connection = _blogAppContext.CreateConnection() )
 			using ( var command = connection.CreateCommand() )
 			{
 				command.Connection = connection;
@@ -66,13 +67,14 @@ namespace BlogUoW.Data
 
 		public void Create( BlogDto blog )
 		{
-			using ( var connection = _blogContext.CreateConnection() )
+			using ( var connection = _blogAppContext.CreateConnection() )
 			using ( var command = connection.CreateCommand() )
 			{
 				command.Connection = connection;
 				command.CommandText = @"INSERT INTO Blogs (Url)
-									  OUTPUT Inserted.BlogId
-									  VALUES (@Url)";
+										OUTPUT Inserted.BlogId
+										VALUES (@Url)";
+
 				var param = command.CreateParameter();
 				param.ParameterName = "Url";
 				param.Value = blog.Url;
