@@ -1,19 +1,18 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using BloggingApp.Data;
+using BloggingApp.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Options;
 
 namespace BloggingApp
 {
-    public class Startup
+	public class Startup
     {
-        public Startup(IConfiguration configuration)
+		private const string DbConnectionString = "Server=(local);Integrated Security=SSPI;" +
+			"Initial Catalog=EFGetStarted.AspNetCore.NewDb";
+
+		public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
         }
@@ -24,10 +23,15 @@ namespace BloggingApp
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddMvc();
-        }
 
-        // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env)
+			// Add application services.
+			services.AddTransient<IBlogAppContext>(s => new BlogAppSqlServerContext( DbConnectionString ));
+			services.AddTransient<IBlogRepository, BlogRepository>();
+			services.AddTransient<IBlogService, BlogService>();
+		}
+
+		// This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
+		public void Configure(IApplicationBuilder app, IHostingEnvironment env)
         {
             if (env.IsDevelopment())
             {

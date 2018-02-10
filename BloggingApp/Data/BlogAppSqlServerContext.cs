@@ -3,7 +3,7 @@ using System.Data.SqlClient;
 
 namespace BloggingApp.Data
 {
-	public class BlogAppSqlServerContext:IBlogAppContext
+	public class BlogAppSqlServerContext : IBlogAppContext
 	{
 		private readonly string _connectionString;
 
