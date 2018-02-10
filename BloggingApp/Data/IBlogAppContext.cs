@@ -1,6 +1,6 @@
 ﻿using System.Data;
 
-namespace BlogUoW.Data
+namespace BloggingApp.Data
 {
 	public interface IBlogAppContext
 	{

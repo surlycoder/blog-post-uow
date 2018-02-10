@@ -1,7 +1,8 @@
-﻿using BlogUoW.Data;
+﻿using BloggingApp.Data;
+using BloggingApp.Data.Entities;
 using Xunit;
 
-namespace BlogUoW.Tests
+namespace BloggingApp.Tests
 {
 	public class PostRepositoryIntegrationTests
 	{

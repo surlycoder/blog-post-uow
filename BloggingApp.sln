@@ -3,9 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.27130.2027
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BlogUoW", "BlogUoW\BlogUoW.csproj", "{4CB4EB2B-D219-4237-ACF9-38EA55D1BBF2}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BloggingApp", "BloggingApp\BloggingApp.csproj", "{4CB4EB2B-D219-4237-ACF9-38EA55D1BBF2}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BlogUoW.Tests", "BlogUoW.Tests\BlogUoW.Tests.csproj", "{19B9F566-197A-4A15-BC7A-5CC2497B1161}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BloggingApp.Tests", "BloggingApp.Tests\BloggingApp.Tests.csproj", "{19B9F566-197A-4A15-BC7A-5CC2497B1161}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

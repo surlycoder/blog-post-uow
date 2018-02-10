@@ -14,7 +14,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\BlogUoW\BlogUoW.csproj" />
+    <ProjectReference Include="..\BloggingApp\BloggingApp.csproj" />
   </ItemGroup>
 
 </Project>

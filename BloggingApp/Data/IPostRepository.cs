@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
+using BloggingApp.Data.Entities;
 
-namespace BlogUoW.Data
+namespace BloggingApp.Data
 {
 	public interface IPostRepository
     {

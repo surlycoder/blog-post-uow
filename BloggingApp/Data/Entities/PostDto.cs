@@ -1,4 +1,4 @@
-﻿namespace BlogUoW.Data
+﻿namespace BloggingApp.Data.Entities
 {
 	public class PostDto
     {

@@ -1,7 +1,7 @@
 ﻿using System.Data;
 using System.Data.SqlClient;
 
-namespace BlogUoW.Data
+namespace BloggingApp.Data
 {
 	public class BlogAppSqlServerContext:IBlogAppContext
 	{

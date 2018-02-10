@@ -1,7 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.Data;
+using BloggingApp.Data.Entities;
 
-namespace BlogUoW.Data
+namespace BloggingApp.Data
 {
 	public class BlogRepository : IBlogRepository
 	{
