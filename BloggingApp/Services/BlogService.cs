@@ -10,11 +10,16 @@ namespace BloggingApp.Services
 	{
 		private readonly IBlogRepository _blogRepository;
 		private readonly IPostRepository _postRepository;
+		private readonly IBlogAppContext _appContext;
 
-		public BlogService(IBlogRepository blogRepository, IPostRepository postRepository)
+		public BlogService(
+			IBlogAppContext appContext,
+			IBlogRepository blogRepository,
+			IPostRepository postRepository)
 		{
 			_blogRepository = blogRepository;
 			_postRepository = postRepository;
+			_appContext = appContext;
 		}
 
 		public BlogDto CreateBlog(BlogDto blogToCreate)
@@ -27,21 +32,31 @@ namespace BloggingApp.Services
 
 		public PostDto CreatePostWithBlog(PostWithBlog postWithBlog)
 		{
-			var blog = new BlogDto()
+			PostDto post = null;
+
+			_appContext.StartSession();
+			try
 			{
-				Url = postWithBlog.BlogUrl
-			};
+				var blog = new BlogDto()
+				{
+					Url = postWithBlog.BlogUrl
+				};
+				_blogRepository.Create(blog);
 
-			_blogRepository.Create(blog);
+				post = new PostDto()
+				{
+					BlogId = blog.Id,
+					Title = postWithBlog.Title,
+					Content = postWithBlog.Content
+				};
+				_postRepository.Create(post);
 
-			var post = new PostDto()
+				_appContext.CompleteSession();
+			} catch
 			{
-				BlogId = blog.Id,
-				Title = postWithBlog.Title,
-				Content = postWithBlog.Content
-			};
-
-			_postRepository.Create(post);
+				_appContext.RollbackSession();
+				throw;
+			}
 
 			return post;
 		}

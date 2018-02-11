@@ -40,7 +40,7 @@ namespace BloggingApp
 			});
 
 			// Add application services.
-			services.AddTransient<IBlogAppContext>(s => new BlogAppSqlServerContext(DbConnectionString));
+			services.AddScoped<IBlogAppContext>(s => new BlogAppSqlServerContext(DbConnectionString));
 			services.AddTransient<IBlogRepository, BlogRepository>();
 			services.AddTransient<IBlogService, BlogService>();
 			services.AddTransient<IPostRepository, PostRepository>();
