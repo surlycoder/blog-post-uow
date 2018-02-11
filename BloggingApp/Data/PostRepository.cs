@@ -45,6 +45,31 @@ namespace BloggingApp.Data
 			return post;
 		}
 
+		public IEnumerable<PostDto> GetAll()
+		{
+			IList<PostDto> posts = new List<PostDto>();
+
+			using ( var connection = _blogAppContext.CreateConnection() )
+			using ( var command = connection.CreateCommand() )
+			{
+				command.Connection = connection;
+				command.CommandText = @"SELECT PostId, BlogId, Content, Title 
+										FROM Posts";
+
+				connection.Open();
+
+				using ( var reader = command.ExecuteReader() )
+				{
+					while ( reader.Read() )
+					{
+						posts.Add(CreatePostFromReader(reader));
+					}
+				}
+			}
+
+			return posts;
+		}
+
 		public IEnumerable<PostDto> GetListByBlogId( int blogId )
 		{
 			IList<PostDto> posts = new List<PostDto>();

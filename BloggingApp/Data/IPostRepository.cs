@@ -8,5 +8,6 @@ namespace BloggingApp.Data
 		PostDto GetById( int id );
 		IEnumerable<PostDto> GetListByBlogId( int blogId );
 		void Create( PostDto blog );
+		IEnumerable<PostDto> GetAll();
 	}
 }
