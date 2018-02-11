@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace BloggingApp.Controllers
 {
-	[Route("api/[controller]")]
+	[Route("api/posts")]
 	public class PostsController : Controller
 	{
 		private readonly IBlogService _blogService;

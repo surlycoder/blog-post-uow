@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace BloggingApp.Controllers
 {
-	[Route("api/[controller]")]
+	[Route("api/blogs")]
 	public class BlogsController : Controller
 	{
 		private readonly IBlogService _blogService;
@@ -22,7 +22,7 @@ namespace BloggingApp.Controllers
 			return Ok(blogs);
 		}
 
-		[HttpGet("{id}")]
+		[HttpGet("{id}", Name = nameof(Get))]
 		public IActionResult Get(int id)
 		{
 			var blog = _blogService.GetBlogById(id);
@@ -40,7 +40,9 @@ namespace BloggingApp.Controllers
 		{
 			var blog = _blogService.CreateBlog(blogToCreate);
 
-			return Ok(blog);
+			return CreatedAtRoute(nameof(Get),
+				new { id = blog.Id },
+				blog);
 		}
 
 		[HttpPut("{id}")]
