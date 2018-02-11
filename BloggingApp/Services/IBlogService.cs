@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using BloggingApp.Data.Entities;
+using BloggingApp.Models;
 
 namespace BloggingApp.Services
 {
@@ -11,5 +12,6 @@ namespace BloggingApp.Services
 		List<PostDto> GetPostsForBlog(int blogId);
 		PostDto GetPost(int id);
 		IList<PostDto> GetPosts();
+		PostDto CreatePostWithBlog(PostWithBlog postWithBlog);
 	}
 }

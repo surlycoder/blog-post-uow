@@ -1,4 +1,5 @@
-﻿using BloggingApp.Services;
+﻿using BloggingApp.Models;
+using BloggingApp.Services;
 using Microsoft.AspNetCore.Mvc;
 
 namespace BloggingApp.Controllers
@@ -21,7 +22,7 @@ namespace BloggingApp.Controllers
 			return Ok(posts);
 		}
 
-		[HttpGet("{id}")]
+		[HttpGet("{id}", Name = nameof(GetById))]
 		public IActionResult GetById(int id)
 		{
 			var blog = _blogService.GetPost(id);
@@ -46,6 +47,16 @@ namespace BloggingApp.Controllers
 			var posts = _blogService.GetPostsForBlog(blogId);
 
 			return Ok(posts);
+		}
+
+		[HttpPost]
+		public IActionResult CreatePostWithBlog([FromBody]PostWithBlog postWithBlog)
+		{
+			var post = _blogService.CreatePostWithBlog(postWithBlog);
+
+			return CreatedAtRoute(nameof(GetById),
+				new { id = post.Id },
+				post);
 		}
 	}
 }

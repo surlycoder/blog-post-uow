@@ -21,7 +21,9 @@ namespace BloggingApp.Data
 			using ( var command = connection.CreateCommand() )
 			{
 				command.Connection = connection;
-				command.CommandText = "SELECT BlogId, Url FROM Blogs WHERE BlogId = @BlogId";
+				command.CommandText = @"SELECT BlogId, Url 
+										FROM Blogs 
+										WHERE BlogId = @BlogId";
 
 				var param = command.CreateParameter();
 				param.ParameterName = "BlogId";
@@ -50,7 +52,8 @@ namespace BloggingApp.Data
 			using ( var command = connection.CreateCommand() )
 			{
 				command.Connection = connection;
-				command.CommandText = "SELECT BlogId, Url FROM Blogs";
+				command.CommandText = @"SELECT BlogId, Url
+										FROM Blogs";
 
 				connection.Open();
 

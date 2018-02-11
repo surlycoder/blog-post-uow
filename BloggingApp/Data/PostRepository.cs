@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Data;
 using BloggingApp.Data.Entities;
 
@@ -9,12 +8,12 @@ namespace BloggingApp.Data
 	{
 		private readonly IBlogAppContext _blogAppContext;
 
-		public PostRepository( IBlogAppContext blogAppContext )
+		public PostRepository(IBlogAppContext blogAppContext)
 		{
 			_blogAppContext = blogAppContext;
 		}
 
-		public PostDto GetById( int id )
+		public PostDto GetById(int id)
 		{
 			PostDto post = null;
 
@@ -29,7 +28,7 @@ namespace BloggingApp.Data
 				var param = command.CreateParameter();
 				param.ParameterName = "PostId";
 				param.Value = id;
-				command.Parameters.Add( param );
+				command.Parameters.Add(param);
 
 				connection.Open();
 
@@ -37,7 +36,7 @@ namespace BloggingApp.Data
 				{
 					if ( reader.Read() )
 					{
-						post = CreatePostFromReader( reader );
+						post = CreatePostFromReader(reader);
 					}
 				}
 			}
@@ -70,7 +69,7 @@ namespace BloggingApp.Data
 			return posts;
 		}
 
-		public IEnumerable<PostDto> GetListByBlogId( int blogId )
+		public IEnumerable<PostDto> GetListByBlogId(int blogId)
 		{
 			IList<PostDto> posts = new List<PostDto>();
 
@@ -85,7 +84,7 @@ namespace BloggingApp.Data
 				var param = command.CreateParameter();
 				param.ParameterName = "BlogId";
 				param.Value = blogId;
-				command.Parameters.Add( param );
+				command.Parameters.Add(param);
 
 				connection.Open();
 
@@ -93,7 +92,7 @@ namespace BloggingApp.Data
 				{
 					while ( reader.Read() )
 					{
-						posts.Add( CreatePostFromReader( reader ) );
+						posts.Add(CreatePostFromReader(reader));
 					}
 				}
 			}
@@ -101,29 +100,29 @@ namespace BloggingApp.Data
 			return posts;
 		}
 
-		public void Create( PostDto post )
+		public void Create(PostDto post)
 		{
 			using ( var connection = _blogAppContext.CreateConnection() )
 			using ( var command = connection.CreateCommand() )
 			{
 				command.Connection = connection;
 				command.CommandText = @"INSERT INTO Posts (BlogId, Content, Title)
-									  OUTPUT Inserted.PostId
-									  VALUES (@BlogId, @Content, @Title)";
+										OUTPUT Inserted.PostId
+										VALUES (@BlogId, @Content, @Title)";
 				var param1 = command.CreateParameter();
 				param1.ParameterName = "BlogId";
 				param1.Value = post.BlogId;
-				command.Parameters.Add( param1 );
+				command.Parameters.Add(param1);
 
 				var param2 = command.CreateParameter();
 				param2.ParameterName = "Content";
 				param2.Value = post.Content;
-				command.Parameters.Add( param2 );
+				command.Parameters.Add(param2);
 
 				var param3 = command.CreateParameter();
 				param3.ParameterName = "Title";
 				param3.Value = post.Title;
-				command.Parameters.Add( param3 );
+				command.Parameters.Add(param3);
 
 				connection.Open();
 
@@ -131,14 +130,14 @@ namespace BloggingApp.Data
 			}
 		}
 
-		private PostDto CreatePostFromReader( IDataReader reader )
+		private PostDto CreatePostFromReader(IDataReader reader)
 		{
 			return new PostDto()
 			{
-				Id = reader.GetInt32( 0 ),
-				BlogId = reader.GetInt32( 1 ),
-				Content = reader.GetString( 2 ),
-				Title = reader.GetString( 3 )
+				Id = reader.GetInt32(0),
+				BlogId = reader.GetInt32(1),
+				Content = reader.GetString(2),
+				Title = reader.GetString(3)
 			};
 		}
 	}

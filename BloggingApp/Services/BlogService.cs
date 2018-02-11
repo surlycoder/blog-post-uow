@@ -2,6 +2,7 @@
 using System.Linq;
 using BloggingApp.Data;
 using BloggingApp.Data.Entities;
+using BloggingApp.Models;
 
 namespace BloggingApp.Services
 {
@@ -22,6 +23,27 @@ namespace BloggingApp.Services
 			var blog = _blogRepository.GetById(blogToCreate.Id);
 
 			return blog;
+		}
+
+		public PostDto CreatePostWithBlog(PostWithBlog postWithBlog)
+		{
+			var blog = new BlogDto()
+			{
+				Url = postWithBlog.BlogUrl
+			};
+
+			_blogRepository.Create(blog);
+
+			var post = new PostDto()
+			{
+				BlogId = blog.Id,
+				Title = postWithBlog.Title,
+				Content = postWithBlog.Content
+			};
+
+			_postRepository.Create(post);
+
+			return post;
 		}
 
 		public BlogDto GetBlogById(int id)
