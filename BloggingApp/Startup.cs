@@ -1,4 +1,5 @@
-﻿using BloggingApp.Data;
+﻿using AutoMapper;
+using BloggingApp.Data;
 using BloggingApp.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -12,7 +13,7 @@ namespace BloggingApp
 	public class Startup
 	{
 		private const string DbConnectionString = "Server=(local);Integrated Security=SSPI;" +
-			"Initial Catalog=EFGetStarted.AspNetCore.NewDb";
+			"Initial Catalog=BlogDB";
 
 		public Startup(IConfiguration configuration)
 		{
@@ -24,6 +25,7 @@ namespace BloggingApp
 		// This method gets called by the runtime. Use this method to add services to the container.
 		public void ConfigureServices(IServiceCollection services)
 		{
+			services.AddAutoMapper();
 			services.AddMvc(setupAction => setupAction.ReturnHttpNotAcceptable = true);
 
 			services.AddSwaggerGen(c =>
@@ -61,7 +63,6 @@ namespace BloggingApp
 				   {
 					   context.Response.StatusCode = 500;
 					   await context.Response.WriteAsync("An unexpected fault occurred.");
-
 				   });
 			   });
 			}

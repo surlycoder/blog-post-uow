@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using AutoMapper;
 using BloggingApp.Data;
 using BloggingApp.Data.Entities;
 using BloggingApp.Models;
@@ -11,26 +12,30 @@ namespace BloggingApp.Services
 		private readonly IBlogRepository _blogRepository;
 		private readonly IPostRepository _postRepository;
 		private readonly IBlogAppContext _appContext;
+		private readonly IMapper _mapper;
 
 		public BlogService(
 			IBlogAppContext appContext,
 			IBlogRepository blogRepository,
-			IPostRepository postRepository)
+			IPostRepository postRepository,
+			IMapper mapper)
 		{
 			_blogRepository = blogRepository;
 			_postRepository = postRepository;
 			_appContext = appContext;
+			_mapper = mapper;
 		}
 
-		public BlogDto CreateBlog(BlogDto blogToCreate)
+		public Blog CreateBlog(BlogForCreate blogToCreate)
 		{
-			_blogRepository.Create(blogToCreate);
-			var blog = _blogRepository.GetById(blogToCreate.Id);
+			var blogDto = _mapper.Map<BlogDto>(blogToCreate);
+			_blogRepository.Create(blogDto);
+			var blog = _blogRepository.GetById(blogDto.Id);
 
-			return blog;
+			return _mapper.Map<Blog>(blog);
 		}
 
-		public PostDto CreatePostWithBlog(PostWithBlog postWithBlog)
+		public Post CreatePostWithBlog(PostWithBlog postWithBlog)
 		{
 			PostDto post = null;
 
@@ -52,38 +57,44 @@ namespace BloggingApp.Services
 				_postRepository.Create(post);
 
 				_appContext.CompleteSession();
-			} catch
+			}
+			catch
 			{
 				_appContext.RollbackSession();
 				throw;
 			}
 
-			return post;
+			return _mapper.Map<Post>(post);
 		}
 
-		public BlogDto GetBlogById(int id)
+		public Blog GetBlogById(int id)
 		{
-			return _blogRepository.GetById(id);
+			var blog = _blogRepository.GetById(id);
+			return _mapper.Map<Blog>(blog);
 		}
 
-		public List<BlogDto> GetBlogs()
+		public List<Blog> GetBlogs()
 		{
-			return _blogRepository.GetAll().ToList();
+			var blogs = _blogRepository.GetAll().ToList();
+			return _mapper.Map<List<Blog>>(blogs);
 		}
 
-		public PostDto GetPost(int id)
+		public Post GetPost(int id)
 		{
-			return _postRepository.GetById(id);
+			var post = _postRepository.GetById(id);
+			return _mapper.Map<Post>(post);
 		}
 
-		public IList<PostDto> GetPosts()
+		public IList<Post> GetPosts()
 		{
-			return _postRepository.GetAll().ToList();
+			var posts = _postRepository.GetAll().ToList();
+			return _mapper.Map<IList<Post>>(posts);
 		}
 
-		public List<PostDto> GetPostsForBlog(int blogId)
+		public List<Post> GetPostsForBlog(int blogId)
 		{
-			return _postRepository.GetListByBlogId(blogId).ToList();
+			var posts = _postRepository.GetListByBlogId(blogId).ToList();
+			return _mapper.Map<List<Post>>(posts);
 		}
 	}
 }

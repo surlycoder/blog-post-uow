@@ -7,7 +7,7 @@ namespace BloggingApp.Tests
 	public class BlogRepositoryIntegrationTests
 	{
 		private const string DbConnectionString = "Server=(local);Integrated Security=SSPI;" +
-			"Initial Catalog=EFGetStarted.AspNetCore.NewDb";
+			"Initial Catalog=BlogDB";
 
 		[Fact]
 		public void GetById_Returns_Blog()

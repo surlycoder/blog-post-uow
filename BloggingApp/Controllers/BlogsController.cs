@@ -1,4 +1,5 @@
 ﻿using BloggingApp.Data.Entities;
+using BloggingApp.Models;
 using BloggingApp.Services;
 using Microsoft.AspNetCore.Mvc;
 
@@ -36,7 +37,7 @@ namespace BloggingApp.Controllers
 		}
 
 		[HttpPost]
-		public IActionResult Post([FromBody]BlogDto blogToCreate)
+		public IActionResult Post([FromBody]BlogForCreate blogToCreate)
 		{
 			var blog = _blogService.CreateBlog(blogToCreate);
 
