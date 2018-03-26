@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using AutoMapper.Data;
 using BloggingApp.Data;
 using BloggingApp.Services;
 using Microsoft.AspNetCore.Builder;
@@ -25,7 +26,7 @@ namespace BloggingApp
 		// This method gets called by the runtime. Use this method to add services to the container.
 		public void ConfigureServices(IServiceCollection services)
 		{
-			services.AddAutoMapper();
+			services.AddAutoMapper(c => c.AddDataReaderMapping());
 			services.AddMvc(setupAction => setupAction.ReturnHttpNotAcceptable = true);
 
 			services.AddSwaggerGen(c =>

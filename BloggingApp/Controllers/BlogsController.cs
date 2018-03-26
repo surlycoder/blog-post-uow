@@ -1,5 +1,4 @@
-﻿using BloggingApp.Data.Entities;
-using BloggingApp.Models;
+﻿using BloggingApp.Models;
 using BloggingApp.Services;
 using Microsoft.AspNetCore.Mvc;
 
@@ -27,6 +26,8 @@ namespace BloggingApp.Controllers
 		public IActionResult Get(int id)
 		{
 			var blog = _blogService.GetBlogById(id);
+
+			//var blog = _blogService.GetBlogPostsById(id);
 
 			if ( blog == null )
 			{

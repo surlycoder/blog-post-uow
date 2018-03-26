@@ -73,6 +73,37 @@ namespace BloggingApp.Services
 			return _mapper.Map<Blog>(blog);
 		}
 
+		public BlogPosts GetBlogPostsById(int id)
+		{
+			var blogPostsDto = new BlogPostsDto()
+			{
+				Blog = new BlogDto()
+				{
+					Id = 1234,
+					Url = "https://www.blogposts.com"
+				},
+				Posts = new List<PostDto>()
+				{
+					new PostDto()
+					{
+						Id = 1,
+						BlogId = 1234,
+						Title = "Complex model mapping",
+						Content = "Complex model mapping is easy"
+					},
+					new PostDto()
+					{
+						Id = 2,
+						BlogId = 1234,
+						Title = "Complex model mapping",
+						Content = "Complex model mapping is hard"
+					}
+				}
+			};
+
+			return _mapper.Map<BlogPosts>(blogPostsDto);
+		}
+
 		public List<Blog> GetBlogs()
 		{
 			var blogs = _blogRepository.GetAll().ToList();

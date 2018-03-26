@@ -12,5 +12,6 @@ namespace BloggingApp.Services
 		Post GetPost(int id);
 		IList<Post> GetPosts();
 		Post CreatePostWithBlog(PostWithBlog postWithBlog);
+		BlogPosts GetBlogPostsById(int id);
 	}
 }

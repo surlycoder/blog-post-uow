@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Data;
+using AutoMapper;
 using BloggingApp.Data.Entities;
 
 namespace BloggingApp.Data
@@ -7,10 +8,13 @@ namespace BloggingApp.Data
 	public class BlogRepository : IBlogRepository
 	{
 		private readonly IBlogAppContext _blogAppContext;
+		private readonly IMapper _mapper;
 
-		public BlogRepository(IBlogAppContext blogAppContext)
+		public BlogRepository(IBlogAppContext blogAppContext, 
+			IMapper mapper)
 		{
 			_blogAppContext = blogAppContext;
+			_mapper = mapper;
 		}
 
 		public BlogDto GetById(int id)
@@ -32,7 +36,8 @@ namespace BloggingApp.Data
 				{
 					if ( reader.Read() )
 					{
-						blog = CreateBlogFromReader(reader);
+						blog = _mapper.Map<IDataReader, BlogDto>(reader);
+						//blog = CreateBlogFromReader(reader);
 					}
 				}
 			}

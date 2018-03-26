@@ -1,3 +1,4 @@
+using AutoMapper;
 using BloggingApp.Data;
 using BloggingApp.Data.Entities;
 using Xunit;
@@ -9,11 +10,21 @@ namespace BloggingApp.Tests
 		private const string DbConnectionString = "Server=(local);Integrated Security=SSPI;" +
 			"Initial Catalog=BlogDB";
 
+		private readonly IMapper _mapper;
+
+		public BlogRepositoryIntegrationTests()
+		{
+			var config = new MapperConfiguration(cfg => {
+				cfg.AddProfile<MappingProfile>();
+			});
+			_mapper = config.CreateMapper();
+		}
 		[Fact]
 		public void GetById_Returns_Blog()
 		{
 			// Arrange
-			var repository = new BlogRepository( new BlogAppSqlServerContext( DbConnectionString ) );
+
+			var repository = new BlogRepository( new BlogAppSqlServerContext( DbConnectionString ), _mapper );
 
 			// Act
 			var blog = repository.GetById( 1 );
@@ -26,7 +37,7 @@ namespace BloggingApp.Tests
 		public void GetAll_Returns_List_Of_Blogs()
 		{
 			// Arrange
-			var repository = new BlogRepository( new BlogAppSqlServerContext( DbConnectionString ) );
+			var repository = new BlogRepository( new BlogAppSqlServerContext( DbConnectionString ), _mapper );
 
 			// Act
 			var blogs = repository.GetAll();
@@ -40,7 +51,7 @@ namespace BloggingApp.Tests
 		public void Create_Inserts_New_Blog()
 		{
 			// Arrange
-			var repository = new BlogRepository( new BlogAppSqlServerContext( DbConnectionString ) );
+			var repository = new BlogRepository( new BlogAppSqlServerContext( DbConnectionString ), _mapper );
 
 			var blogToCreate = new BlogDto()
 			{
