@@ -1,5 +1,7 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Data;
+using AutoMapper;
 using BloggingApp.Data.Entities;
 
 namespace BloggingApp.Data
@@ -7,20 +9,21 @@ namespace BloggingApp.Data
 	public class PostRepository : IPostRepository
 	{
 		private readonly IBlogAppContext _blogAppContext;
+		private readonly IMapper _mapper;
 
-		public PostRepository(IBlogAppContext blogAppContext)
+		public PostRepository(IBlogAppContext blogAppContext,
+			IMapper mapper)
 		{
 			_blogAppContext = blogAppContext;
+			_mapper = mapper;
 		}
 
 		public PostDto GetById(int id)
 		{
 			PostDto post = null;
 
-			using ( var connection = _blogAppContext.CreateConnection() )
-			using ( var command = connection.CreateCommand() )
+			using ( var command = _blogAppContext.CreateCommand() )
 			{
-				command.Connection = connection;
 				command.CommandText = @"SELECT PostId, BlogId, Content, Title 
 										FROM Posts 
 										WHERE PostId = @PostId";
@@ -30,13 +33,12 @@ namespace BloggingApp.Data
 				param.Value = id;
 				command.Parameters.Add(param);
 
-				connection.Open();
-
 				using ( var reader = command.ExecuteReader() )
 				{
 					if ( reader.Read() )
 					{
-						post = CreatePostFromReader(reader);
+						//post = CreatePostFromReader(reader);
+						post = _mapper.Map<IDataReader, PostDto>(reader);
 					}
 				}
 			}
@@ -48,14 +50,10 @@ namespace BloggingApp.Data
 		{
 			IList<PostDto> posts = new List<PostDto>();
 
-			using ( var connection = _blogAppContext.CreateConnection() )
-			using ( var command = connection.CreateCommand() )
+			using ( var command = _blogAppContext.CreateCommand() )
 			{
-				command.Connection = connection;
 				command.CommandText = @"SELECT PostId, BlogId, Content, Title 
 										FROM Posts";
-
-				connection.Open();
 
 				using ( var reader = command.ExecuteReader() )
 				{
@@ -73,10 +71,8 @@ namespace BloggingApp.Data
 		{
 			IList<PostDto> posts = new List<PostDto>();
 
-			using ( var connection = _blogAppContext.CreateConnection() )
-			using ( var command = connection.CreateCommand() )
+			using ( var command = _blogAppContext.CreateCommand() )
 			{
-				command.Connection = connection;
 				command.CommandText = @"SELECT PostId, BlogId, Content, Title 
 										FROM Posts
 										WHERE BlogId = @BlogId";
@@ -85,8 +81,6 @@ namespace BloggingApp.Data
 				param.ParameterName = "BlogId";
 				param.Value = blogId;
 				command.Parameters.Add(param);
-
-				connection.Open();
 
 				using ( var reader = command.ExecuteReader() )
 				{
@@ -102,13 +96,14 @@ namespace BloggingApp.Data
 
 		public void Create(PostDto post)
 		{
-			using ( var connection = _blogAppContext.CreateConnection() )
-			using ( var command = connection.CreateCommand() )
+			//throw new Exception("Something bad happened!");
+
+			using ( var command = _blogAppContext.CreateCommand() )
 			{
-				command.Connection = connection;
 				command.CommandText = @"INSERT INTO Posts (BlogId, Content, Title)
 										OUTPUT Inserted.PostId
 										VALUES (@BlogId, @Content, @Title)";
+
 				var param1 = command.CreateParameter();
 				param1.ParameterName = "BlogId";
 				param1.Value = post.BlogId;
@@ -123,8 +118,6 @@ namespace BloggingApp.Data
 				param3.ParameterName = "Title";
 				param3.Value = post.Title;
 				command.Parameters.Add(param3);
-
-				connection.Open();
 
 				post.Id = (int)command.ExecuteScalar();
 			}

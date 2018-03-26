@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Data;
+using AutoMapper;
 using BloggingApp.Data.Entities;
 
 namespace BloggingApp.Data
@@ -7,20 +8,21 @@ namespace BloggingApp.Data
 	public class BlogRepository : IBlogRepository
 	{
 		private readonly IBlogAppContext _blogAppContext;
+		private readonly IMapper _mapper;
 
-		public BlogRepository( IBlogAppContext blogAppContext )
+		public BlogRepository(IBlogAppContext blogAppContext, 
+			IMapper mapper)
 		{
 			_blogAppContext = blogAppContext;
+			_mapper = mapper;
 		}
 
-		public BlogDto GetById( int id )
+		public BlogDto GetById(int id)
 		{
 			BlogDto blog = null;
 
-			using ( var connection = _blogAppContext.CreateConnection() )
-			using ( var command = connection.CreateCommand() )
+			using ( var command = _blogAppContext.CreateCommand() )
 			{
-				command.Connection = connection;
 				command.CommandText = @"SELECT BlogId, Url 
 										FROM Blogs 
 										WHERE BlogId = @BlogId";
@@ -28,15 +30,14 @@ namespace BloggingApp.Data
 				var param = command.CreateParameter();
 				param.ParameterName = "BlogId";
 				param.Value = id;
-				command.Parameters.Add( param );
-
-				connection.Open();
+				command.Parameters.Add(param);
 
 				using ( var reader = command.ExecuteReader() )
 				{
 					if ( reader.Read() )
 					{
-						blog = CreateBlogFromReader( reader );
+						blog = _mapper.Map<IDataReader, BlogDto>(reader);
+						//blog = CreateBlogFromReader(reader);
 					}
 				}
 			}
@@ -48,20 +49,16 @@ namespace BloggingApp.Data
 		{
 			IList<BlogDto> blogs = new List<BlogDto>();
 
-			using ( var connection = _blogAppContext.CreateConnection() )
-			using ( var command = connection.CreateCommand() )
+			using ( var command = _blogAppContext.CreateCommand() )
 			{
-				command.Connection = connection;
 				command.CommandText = @"SELECT BlogId, Url
 										FROM Blogs";
-
-				connection.Open();
 
 				using ( var reader = command.ExecuteReader() )
 				{
 					while ( reader.Read() )
 					{
-						blogs.Add( CreateBlogFromReader( reader ) );
+						blogs.Add(CreateBlogFromReader(reader));
 					}
 				}
 			}
@@ -69,12 +66,10 @@ namespace BloggingApp.Data
 			return blogs;
 		}
 
-		public void Create( BlogDto blog )
+		public void Create(BlogDto blog)
 		{
-			using ( var connection = _blogAppContext.CreateConnection() )
-			using ( var command = connection.CreateCommand() )
+			using ( var command = _blogAppContext.CreateCommand() )
 			{
-				command.Connection = connection;
 				command.CommandText = @"INSERT INTO Blogs (Url)
 										OUTPUT Inserted.BlogId
 										VALUES (@Url)";
@@ -82,20 +77,18 @@ namespace BloggingApp.Data
 				var param = command.CreateParameter();
 				param.ParameterName = "Url";
 				param.Value = blog.Url;
-				command.Parameters.Add( param );
-
-				connection.Open();
+				command.Parameters.Add(param);
 
 				blog.Id = (int)command.ExecuteScalar();
 			}
 		}
 
-		private BlogDto CreateBlogFromReader( IDataReader reader )
+		private BlogDto CreateBlogFromReader(IDataReader reader)
 		{
 			return new BlogDto()
 			{
-				Id = reader.GetInt32( 0 ),
-				Url = reader.GetString( 1 )
+				Id = reader.GetInt32(0),
+				Url = reader.GetString(1)
 			};
 		}
 	}
