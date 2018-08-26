@@ -40,6 +40,7 @@ namespace BloggingApp
 					Contact = new Contact { Name = "Jeremy Beck", Email = "", Url = "" },
 					License = new License { Name = "Use under LICX", Url = "https://example.com/license" }
 				});
+				//c.TagActionsBy(api => api.GroupName);
 			});
 
 			// Add application services.
