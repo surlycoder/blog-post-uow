@@ -4,8 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace BloggingApp.Controllers
 {
-	[Route("api/posts")]
-	public class PostsController : Controller
+	public class PostsController : BaseController
 	{
 		private readonly IBlogService _blogService;
 
